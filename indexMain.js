@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(bodyParser.json({ limit: '50mb' }));
 const navigationTimeout = 60 * 1000
-app.post('/convert', async (req, res) => {
+app.post('/convert-html', async (req, res) => {
   try {
     const html = req.body.html;
     // console.log(req.body,"req.body");
@@ -20,11 +20,11 @@ app.post('/convert', async (req, res) => {
     const compiledHtml = template({});
 
     // Launch a headless browser using Puppeteer
-    const browser = await puppeteer.launch({ headless: false , devtools: true });
+    const browser = await puppeteer.launch({ headless: true , devtools: true, });
     const page = await browser.newPage();
 
     // Set the page content to the compiled HTML
-    await page.setContent(compiledHtml, { timeout: navigationTimeout })
+    await page.setContent(compiledHtml, { timeout: 0 })
     // const setContentPromise = new Promise((resolve, reject) => {
     //   page.on('error', reject);
     //   page.on('pageerror', reject);
@@ -50,7 +50,7 @@ app.post('/convert', async (req, res) => {
     await page.close()
 
     // Save the PDF to disk
-    const pdfPath = path.join(__dirname, 'public', 'output.pdf');
+    const pdfPath = path.join(__dirname, 'uploads', 'output.pdf');
     fs.writeFileSync(pdfPath, pdf);
 
     const url = `http://localhost:5000/output.pdf`;
