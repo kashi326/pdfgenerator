@@ -58,7 +58,7 @@ app.post('/convert-html', async (req, res) => {
     res.json({ url });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error generating PDF' });
+    res.status(500).json({ error: 'Error generating PDF error: ' + err.message });
   }
 });
 
