@@ -7,12 +7,12 @@ const path = require('path');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
 app.use(bodyParser.json({ limit: '50mb' }));
-const navigationTimeout = 60 * 1000
+app.use(express.static('pdf_uploads'));
 app.post('/convert-html', async (req, res) => {
   try {
     const html = req.body.html;
+    const client_name = req.body.client_name;
     // console.log(html,"htmlhtmlhtml");
 
     // Compile the HTML template using Handlebars
@@ -50,10 +50,10 @@ app.post('/convert-html', async (req, res) => {
     await page.close()
 
     // Save the PDF to disk
-    const pdfPath = path.join(__dirname, 'uploads', 'output.pdf');
+    const pdfPath = path.join(__dirname, 'pdf_uploads', 'output.pdf');
     fs.writeFileSync(pdfPath, pdf);
 
-    const url = `http://localhost:5000/output.pdf`;
+    const url = `http://pdfapi.tetworld.com/${client_name}.pdf`;
     res.json({ url });
   } catch (err) {
     console.error(err);
