@@ -8,7 +8,7 @@ const path = require('path');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
-app.use(express.static('pdf_uploads'));
+app.use(express.static('uploads'));
 app.post('/convert-html', async (req, res) => {
   try {
     const html = req.body.html;
@@ -51,7 +51,7 @@ app.post('/convert-html', async (req, res) => {
 		await browser.close()
 
     // Save the PDF to disk
-    const pdfPath = path.join(__dirname, 'pdf_uploads', `${client_name}.pdf`);
+    const pdfPath = path.join(__dirname, 'uploads', `${client_name}.pdf`);
     fs.writeFileSync(pdfPath, pdf);
 
     const url = `http://pdfapi.tetworld.com/${client_name}.pdf`;
