@@ -2,13 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const puppeteer = require('puppeteer');
 const handlebars = require('handlebars');
-const fs = require('fs');
-const path = require('path');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
-app.use(express.static('uploads'));
 app.post('/convert-html', async (req, res) => {
   try {
     const html = req.body.html;
