@@ -40,22 +40,21 @@ app.post('/convert-html', async (req, res) => {
 		const pdf = await page.pdf({
 			format: 'A4',
 			printBackground: true,
-			margin: {
-				top: '10mm',
-				bottom: '10mm',
-				left: '10mm',
-				right: '10mm',
-			},
+			// margin: {
+			// 	top: '10mm',
+			// 	bottom: '10mm',
+			// 	left: '10mm',
+			// 	right: '10mm',
+			// },
+			preferCSSPageSize:true,
 		});
 		await page.close()
 		await browser.close()
 
     // Save the PDF to disk
     const pdfPath = path.join(__dirname, 'uploads', `${client_name}.pdf`);
-    fs.writeFileSync(pdfPath, pdf);
-
-    const url = `http://pdfapi.tetworld.com/${client_name}.pdf`;
-    res.json({ url });
+	res.setHeader('Content-Type', 'application/pdf');
+	res.sendFile(pdfPath);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error generating PDF error: ' + err.message });
