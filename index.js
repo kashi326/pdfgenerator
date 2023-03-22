@@ -52,9 +52,15 @@ app.post('/convert-html', async (req, res) => {
 		await browser.close()
 
     // Save the PDF to disk
-    const pdfPath = path.join(__dirname, 'uploads', `${client_name}.pdf`);
-	res.setHeader('Content-Type', 'application/pdf');
-	res.sendFile(pdfPath);
+	const fileName =  `${client_name}.pdf`;
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.setHeader('Content-Length', pdf.length);
+    res.send(pdf);
+
+    // const pdfPath = path.join(__dirname, 'uploads', `${client_name}.pdf`);
+	// res.setHeader('Content-Type', 'application/pdf');
+	// res.sendFile(pdfPath);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error generating PDF error: ' + err.message });
