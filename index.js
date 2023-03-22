@@ -37,13 +37,13 @@ app.post('/convert-html', async (req, res) => {
 		const pdf = await page.pdf({
 			format: 'A4',
 			printBackground: true,
-			// margin: {
-			// 	top: '10mm',
-			// 	bottom: '10mm',
-			// 	left: '10mm',
-			// 	right: '10mm',
-			// },
-			preferCSSPageSize:true,
+			margin: {
+				top: '10mm',
+				bottom: '10mm',
+				left: '10mm',
+				right: '10mm',
+			},
+			// preferCSSPageSize:true,
 		});
 		await page.close()
 		await browser.close()
