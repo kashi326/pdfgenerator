@@ -8,6 +8,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.post('/convert-html', async (req, res) => {
 	try {
+		console.log("api hit");
 		const html = req.body.html;
 		const client_name = req.body.client_name.replace(' ', '-');
 		// console.log(html,"htmlhtmlhtml");
@@ -17,7 +18,7 @@ app.post('/convert-html', async (req, res) => {
 		const compiledHtml = template({});
 
 		// Launch a headless browser using Puppeteer
-		const browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: true, devtools: false, });
+		const browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: false, devtools: false, });
 		const page = await browser.newPage();
 
 		// Set the page content to the compiled HTML
