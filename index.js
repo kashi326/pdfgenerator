@@ -13,7 +13,7 @@ app.post('/convert-html', async (req, res) => {
 		const html = req.body.html;
 		const client_name = req.body.client_name.replace(' ', '-');
 		const xvfbOptions = {
-			silent: false,
+			silent: true,
 			xvfb_args: ['-screen', '0', '1280x1024x24'],
 		};
 		const xvfbDisplay = new xvfb(xvfbOptions);
@@ -36,7 +36,7 @@ app.post('/convert-html', async (req, res) => {
 		await page.setContent(compiledHtml, {timeout: 0})
 
 		// Add a style tag to the page
-		// await page.addStyleTag({content: '@page { size: 210mm 240mm;margin: 0px !important;padding: 0px !important;}  .custom-print-page {width: 250mm !important;margin: auto !important;page-break-after: always !important; } .purple-logo {	bottom: -2mm !important;	transform: scale(1.045);	} .evelyn-footer {	height: auto !important; }'});
+		await page.addStyleTag({content: '@page { size: 210mm 240mm;margin: 0px !important;padding: 0px !important;}  .custom-print-page {width: 250mm !important;margin: auto !important;page-break-after: always !important; } .purple-logo {	bottom: -2mm !important;	transform: scale(1.045);	} .evelyn-footer {	height: auto !important; }'});
 		await page.setCacheEnabled(false)
 		page.setDefaultNavigationTimeout(60000);
 		await page.emulateMediaType('print');
