@@ -18,25 +18,19 @@ app.post('/convert-html', async (req, res) => {
 		const compiledHtml = template({});
 
 		// Launch a headless browser using Puppeteer
-		const browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: false, devtools: false, });
+		const browser = await puppeteer.launch({ args: ['--no-sandbox','--disable-gpu'], headless: true, devtools: false, });
 		const page = await browser.newPage();
 
 		// Set the page content to the compiled HTML
 		await page.setContent(compiledHtml, { timeout: 0 })
-		// const setContentPromise = new Promise((resolve, reject) => {
-		//   page.on('error', reject);
-		//   page.on('pageerror', reject);
-		//   page.on('load', resolve);
-		//   page.setContent(compiledHtml, { timeout: navigationTimeout })
-		// });
 
-		// await Promise.race([setContentPromise, new Promise((resolve, reject) => {
-		//   setTimeout(() => reject(new Error('Navigation timeout')), navigationTimeout);
-		// })]);
-
-		// Generate a PDF with the same dimensions as the browser viewport
+		// Add a style tag to the page
+		await page.addStyleTag({ content: '@page { size: 210mm 240mm;margin: 0px !important;padding: 0px !important;}  .custom-print-page {width: 250mm !important;margin: auto !important;page-break-after: always !important; } .purple-logo {	bottom: -2mm !important;	transform: scale(1.045);	} .evelyn-footer {	height: auto !important; }' });
+		await page.setCacheEnabled(false)
+		 page.setDefaultNavigationTimeout(60000);
 		await page.emulateMediaType('print');
-		await page.evaluate(() => matchMedia('screen').matches);
+		// await page.evaluate(() => matchMedia('screen').matches);
+		await page.screenshot({path: 'modified-page.png'});
 		const pdf = await page.pdf({
 			// format: 'A4',
 			margin: { top: '30px', right: 0, bottom: 0, left: 0 },
