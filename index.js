@@ -29,6 +29,9 @@ app.post('/convert-html', async (req, res) => {
 		await page.setCacheEnabled(false)
 		 page.setDefaultNavigationTimeout(60000);
 		await page.emulateMediaType('print');
+		await page.waitForNavigation({
+			waitUntil: 'networkidle0',
+		});
 		// await page.evaluate(() => matchMedia('screen').matches);
 		await page.screenshot({path: 'modified-page.png'});
 		const pdf = await page.pdf({
@@ -36,6 +39,7 @@ app.post('/convert-html', async (req, res) => {
 			margin: { top: '30px', right: 0, bottom: 0, left: 0 },
 			preferCSSPageSize: true,
 			printBackground: true,
+
 			// scale: 1,
 			// preferCSSPageSize: false,
 			// width:'290mm',
