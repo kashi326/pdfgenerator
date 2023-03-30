@@ -29,9 +29,7 @@ app.post('/convert-html', async (req, res) => {
 		await page.setCacheEnabled(false)
 		 page.setDefaultNavigationTimeout(60000);
 		await page.emulateMediaType('print');
-		await page.waitForNavigation({
-			waitUntil: 'networkidle0',
-		});
+
 		// await page.evaluate(() => matchMedia('screen').matches);
 		await page.screenshot({path: 'modified-page.png'});
 		const pdf = await page.pdf({
