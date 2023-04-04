@@ -11,36 +11,27 @@ app.post('/convert-html', async (req, res) => {
 		console.log("api hit");
 		const html = req.body.html;
 		const client_name = req.body.client_name.replace(' ', '-');
-		// console.log(html,"htmlhtmlhtml");
-
-		// Compile the HTML template using Handlebars
 		const template = handlebars.compile(html, { strict: true });
 		const compiledHtml = template({});
 
 		// Launch a headless browser using Puppeteer
-		const browser = await puppeteer.launch({ args: ['--no-sandbox','--disable-gpu'], headless: true, devtools: false, });
+		const browser = await puppeteer.launch({ 
+			headless: true,
+			args: [ '--no-sandbox', '--disable-gpu'],
+		 });
 		const page = await browser.newPage();
 
 		// Set the page content to the compiled HTML
 		await page.setContent(compiledHtml, { timeout: 0 })
 
-		// Add a style tag to the page
-		await page.addStyleTag({ content: '@page { size: 210mm 240mm;margin: 0px !important;padding: 0px !important;}  .custom-print-page {width: 250mm !important;margin: auto !important;page-break-after: always !important; } .purple-logo {	bottom: -2mm !important;	transform: scale(1.045);	} .evelyn-footer {	height: auto !important; }' });
-		await page.setCacheEnabled(false)
-		 page.setDefaultNavigationTimeout(60000);
 		await page.emulateMediaType('print');
-		// await page.evaluate(() => matchMedia('screen').matches);
-		await page.screenshot({path: 'modified-page.png'});
+		
+
 		const pdf = await page.pdf({
 			// format: 'A4',
 			margin: { top: '30px', right: 0, bottom: 0, left: 0 },
 			preferCSSPageSize: true,
 			printBackground: true,
-			// scale: 1,
-			// preferCSSPageSize: false,
-			// width:'290mm',
-			// height: '290mm',
-			// height: 'auto'
 		});
 		await page.close()
 		await browser.close()
