@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const puppeteer = require('puppeteer');
 const handlebars = require('handlebars');
-const xvfb = require('xvfb');
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
@@ -36,7 +35,6 @@ app.post('/convert-html', async (req, res) => {
 		});
 		await page.close()
 		await browser.close()
-		xvfbDisplay.stopSync();
 
 		// Save the PDF to disk
 		const fileName = `${client_name}.pdf`;
