@@ -8,7 +8,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json({limit: '50mb'}));
 app.post('/convert-html', async (req, res) => {
 	try {
-		console.log("api hit");
 		const html = req.body.html;
 		const client_name = req.body.client_name.replace(' ', '-');
 		const template = handlebars.compile(html, { strict: true });
@@ -29,7 +28,6 @@ app.post('/convert-html', async (req, res) => {
 
 		const pdf = await page.pdf({
 			format: 'A4',
-			margin: {top: '30px', right: 0, bottom: 0, left: 0},
 			preferCSSPageSize: true,
 			printBackground: true,
 		});
@@ -42,10 +40,6 @@ app.post('/convert-html', async (req, res) => {
 		res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 		res.setHeader('Content-Length', pdf.length);
 		res.send(pdf);
-
-		// const pdfPath = path.join(__dirname, 'uploads', `${client_name}.pdf`);
-		// res.setHeader('Content-Type', 'application/pdf');
-		// res.sendFile(pdfPath);
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({error: 'Error generating PDF error: ' + err.message});
