@@ -17,7 +17,7 @@ app.post('/convert-html', async (req, res) => {
 		// Launch a headless browser using Puppeteer
 		const browser = await puppeteer.launch({ 
 			headless: true,
-			args: [ '--no-sandbox', '--disable-gpu'],
+			args: [ '--no-sandbox', '--disable-gpu','--disable-web-security'],
 		 });
 		const page = await browser.newPage();
 
@@ -28,7 +28,7 @@ app.post('/convert-html', async (req, res) => {
 		
 
 		const pdf = await page.pdf({
-			// format: 'A4',
+			format: 'A4',
 			margin: {top: '30px', right: 0, bottom: 0, left: 0},
 			preferCSSPageSize: true,
 			printBackground: true,
